@@ -22,7 +22,8 @@ defmodule Hangman.Game do
   end
 
   def guess(game, guess) do
-    accept_guess(game, guess, MapSet.member?(game.used, guess))
+    normalized_guess = guess |> String.downcase |> String.trim
+    accept_guess(game, normalized_guess, MapSet.member?(game.used, normalized_guess))
   end
 
   def tally(game) do
@@ -38,6 +39,7 @@ defmodule Hangman.Game do
   defp accept_guess(game, _guess, _already_guessed = true) do
     Map.put(game, :game_state, :already_used)
   end
+
 
   defp accept_guess(game, guess, _already_guessed) do
     Map.put(game, :used, MapSet.put(game.used, guess))
