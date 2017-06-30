@@ -1,0 +1,5 @@
+<div class="jumbotron">
+  <h2>Hangman</h2>
+
+   <%= new_game_button(@conn) %>
+</div>

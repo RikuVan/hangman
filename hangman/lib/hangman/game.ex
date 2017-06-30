@@ -18,12 +18,12 @@ defmodule Hangman.Game do
   end
 
   def guess(game = %{game_state: state}, _guess) when state in [:won, :lost] do
-    game
+    return_with_tally(game)
   end
 
   def guess(game, guess) do
-    normalized_guess = guess |> String.downcase |> String.trim
-    accept_guess(game, normalized_guess, MapSet.member?(game.used, normalized_guess))
+    accept_guess(game, guess, MapSet.member?(game.used, guess))
+     |> return_with_tally()
   end
 
   def tally(game) do
@@ -54,7 +54,10 @@ defmodule Hangman.Game do
   end
 
   defp score_guess(game = %{turns_left: 1}, _not_good_guess) do
-    Map.put(game, :game_state, :lost)
+    %{game |
+        game_state: :lost,
+        turns_left: 0
+      }
   end
 
   defp score_guess(game = %{turns_left: turns_left}, _not_good_guess) do
@@ -74,5 +77,6 @@ defmodule Hangman.Game do
 
   defp maybe_won(true), do: :won
   defp maybe_won(false), do: :good_guess
+  defp return_with_tally(game), do: {game, tally(game)}
 
 end

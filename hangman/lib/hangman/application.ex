@@ -1,4 +1,4 @@
-defmodule Dictionary.Application do
+defmodule Hangman.Application do
   use Application
 
   def start(_type, _args) do
@@ -6,12 +6,12 @@ defmodule Dictionary.Application do
     import Supervisor.Spec
 
     children = [
-      worker(Dictionary.WordList, [])
+      worker(Hangman.Server, [])
     ]
 
     options = [
-      name: Dictionary.Supervisor,
-      strategy: :one_for_one
+      name: Hangman.Supervisor,
+      strategy: :simple_one_for_one
     ]
 
     Supervisor.start_link(children, options)
